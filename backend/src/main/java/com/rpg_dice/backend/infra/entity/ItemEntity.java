@@ -31,5 +31,5 @@ public class ItemEntity implements Serializable {
 	private Long quantity;
 	@ManyToOne
 	@JoinColumn(name = "sheet_id", nullable = false)
-	private SheetEntity sheet;
+	private SheetEntity sheetEntity;
 }

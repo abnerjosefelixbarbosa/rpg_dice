@@ -29,5 +29,5 @@ public class PlayerEntity {
 	@Column(name = "email", nullable = false, unique = true, length = 50)
 	private String email;
 	@OneToMany(mappedBy = "playerEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-	private List<AccountEntity> accounts;
+	private List<AccountEntity> accountEntities;
 }

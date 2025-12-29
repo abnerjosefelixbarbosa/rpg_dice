@@ -29,11 +29,11 @@ public class AccountEntity implements Serializable {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name = "password", nullable = false, unique = true)
+	@Column(name = "password", nullable = false, length = 100)
 	private String password;
 	@ManyToOne
 	@JoinColumn(name = "player_id", nullable = false)
-	private PlayerEntity player;	
-	@OneToMany(mappedBy = "account_entity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-	private List<SheetEntity> sheets;
+	private PlayerEntity playerEntity;	
+	@OneToMany(mappedBy = "accountEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+	private List<SheetEntity> sheetEntities;
 }

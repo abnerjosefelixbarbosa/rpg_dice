@@ -27,15 +27,15 @@ public class SheetEntity {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name = "name", nullable = false, unique = true)
+	@Column(name = "name", nullable = false, unique = true, length = 100)
 	private String name;
 	@Column(name = "age", nullable = false)
 	private Long age;
-	@Column(name = "specie", nullable = false)
+	@Column(name = "specie", nullable = false, length = 100)
 	private String specie;
 	@Column(name = "gender", nullable = false)
 	private GenderEntity gender;
-	@Column(name = "country", nullable = false)
+	@Column(name = "country", nullable = false, length = 100)
 	private String country;
 	@Embedded
 	private StatusEntity status;
@@ -49,7 +49,7 @@ public class SheetEntity {
 	private Long level;
 	@ManyToOne
 	@JoinColumn(name = "account_id", nullable = false)
-	private AccountEntity account;
+	private AccountEntity accountEntity;
 	@OneToMany(mappedBy = "sheetEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-	private List<ItemEntity> items;
+	private List<ItemEntity> itemEntities;
 }
