@@ -24,9 +24,9 @@ public class PlayerEntity {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name = "name", nullable = false, unique = true, length = 100)
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
-	@Column(name = "email", nullable = false, unique = true, length = 50)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 	@OneToMany(mappedBy = "playerEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
 	private List<AccountEntity> accountEntities;

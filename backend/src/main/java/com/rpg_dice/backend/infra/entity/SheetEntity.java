@@ -6,6 +6,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -27,15 +29,16 @@ public class SheetEntity {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name = "name", nullable = false, unique = true, length = 100)
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 	@Column(name = "age", nullable = false)
 	private Long age;
-	@Column(name = "specie", nullable = false, length = 100)
+	@Column(name = "specie", nullable = false)
 	private String specie;
 	@Column(name = "gender", nullable = false)
-	private GenderEntity gender;
-	@Column(name = "country", nullable = false, length = 100)
+	@Enumerated(EnumType.STRING)
+	private GenderTypeEntity genderTypeEntity;
+	@Column(name = "country", nullable = false)
 	private String country;
 	@Embedded
 	private StatusEntity status;

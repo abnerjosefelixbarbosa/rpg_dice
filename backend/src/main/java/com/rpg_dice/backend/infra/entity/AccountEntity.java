@@ -29,7 +29,7 @@ public class AccountEntity implements Serializable {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name = "password", nullable = false, length = 100)
+	@Column(name = "password", nullable = false)
 	private String password;
 	@ManyToOne
 	@JoinColumn(name = "player_id", nullable = false)

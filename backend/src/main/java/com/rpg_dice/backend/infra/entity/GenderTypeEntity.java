@@ -1,5 +1,5 @@
 package com.rpg_dice.backend.infra.entity;
 
-public enum GenderEntity {
-	MALE, FEMA
+public enum GenderTypeEntity {
+	MALE, FEMALE
 }

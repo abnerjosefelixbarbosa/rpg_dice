@@ -25,7 +25,7 @@ public class ItemEntity implements Serializable {
 	@Id
 	@Column(name = "id")
 	private String id;
-	@Column(name = "description", nullable = false, length = 100)
+	@Column(name = "description", nullable = false)
 	private String description;
 	@Column(name = "quantity", nullable = false)
 	private Long quantity;
