@@ -16,7 +16,7 @@ public class Sheet {
 	private String name;
 	private Long age;
 	private String specie;
-	private String gender;
+	private Gender gender;
 	private String country;
 	private Status status;
 	private Long hp;
