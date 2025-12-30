@@ -1,5 +1,7 @@
 package com.rpg_dice.backend.infra.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Embeddable
-public class StatusEntity {
+public class StatusEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Column(name = "strength", nullable = false)
 	private Long strength;
 	@Column(name = "dexterity", nullable = false)

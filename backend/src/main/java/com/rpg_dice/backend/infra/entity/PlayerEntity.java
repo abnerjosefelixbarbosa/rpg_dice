@@ -1,5 +1,6 @@
 package com.rpg_dice.backend.infra.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -20,7 +21,9 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "player_tb")
-public class PlayerEntity {
+public class PlayerEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@Column(name = "id")
 	private String id;
