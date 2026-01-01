@@ -28,11 +28,11 @@ public class AccountController {
 	@PostMapping(value = "/create")
 	public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountRequestDTO dto) {
 		Account account = accountMapper.toAccount(dto);
-		
+
 		account = accountUsercase.create(account);
-		
+
 		AccountResponseDTO accountResponseDTO = accountMapper.toAccountResponseDTO(account);
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(accountResponseDTO);
 	}
 }

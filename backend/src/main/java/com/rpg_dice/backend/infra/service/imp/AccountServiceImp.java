@@ -17,14 +17,14 @@ public class AccountServiceImp implements AccountService {
 	private final AccountEntityRepository accountEntityRepository;
 	private final PlayerService playerService;
 	private final AccountMapper accountMapper;
-	
+
 	public Account create(Account account) {
 		AccountEntity accountEntity = accountMapper.toAccountEntity(account);
-		
+
 		playerService.save(accountEntity.getPlayerEntity());
-		
+
 		accountEntity = accountEntityRepository.save(accountEntity);
-		
+
 		return accountMapper.toAccount(accountEntity);
 	}
 }

@@ -2,6 +2,7 @@ package com.rpg_dice.backend;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +23,7 @@ import com.rpg_dice.backend.infra.repository.PlayerEntityRepository;
 @SpringBootTest
 @ActiveProfiles("dev")
 @AutoConfigureMockMvc
-class AccountControllerTI {
+public class AccountPlayerNameControllerTI {
 	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
@@ -45,14 +46,40 @@ class AccountControllerTI {
 	}
 
 	@Test
-	void shouldCreateAndReturnStatus201() throws Exception {
-		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", "nome1", "email1@gmail.com");
+	void shouldCreateWithNullPlayerNameAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", null, "email1@gmail.com");
 
 		String object = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isCreated()).andDo(print());
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerName").value("Nome do jogador não deve ser nulo ou vázio."))
+				.andDo(print());
 	}
-	
-	
+
+	@Test
+	void shouldCreateWithBlankPlayerNameAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", "", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerName").value("Nome do jogador não deve ser nulo ou vázio."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithMoreThan100CharactersPlayerNameAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1",
+				"Nome1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerName").value("Nome do jogador não deve ter mais de 100 caracteres."))
+				.andDo(print());
+	}
 }

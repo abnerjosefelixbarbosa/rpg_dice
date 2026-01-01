@@ -13,56 +13,26 @@ import com.rpg_dice.backend.infra.entity.PlayerEntity;
 import com.rpg_dice.backend.infra.mapper.AccountMapper;
 
 @Component
-public class AccountMapperImp implements AccountMapper{
+public class AccountMapperImp implements AccountMapper {
 	public Account toAccount(AccountRequestDTO dto) {
-		return new Account(
-				UUID.randomUUID().toString(),
-				dto.password(),
-				new Player(
-						UUID.randomUUID().toString(),
-						dto.playerName(),
-						dto.playerEmail(),
-						null
-			    ),
-		        null
-		 );
+		return new Account(UUID.randomUUID().toString(), dto.password(),
+				new Player(UUID.randomUUID().toString(), dto.playerName(), dto.playerEmail(), null), null);
 	}
-	
+
 	public AccountResponseDTO toAccountResponseDTO(Account account) {
-		return new AccountResponseDTO(
-				account.getId(),
-				account.getPassword(),
-				account.getPlayer().getId(),
-				account.getPlayer().getName(),
-				account.getPlayer().getEmail()
-		 );
+		return new AccountResponseDTO(account.getId(), account.getPassword(), account.getPlayer().getId(),
+				account.getPlayer().getName(), account.getPlayer().getEmail());
 	}
-	
+
 	public AccountEntity toAccountEntity(Account account) {
-		return new AccountEntity(
-				account.getId(),
-				account.getPassword(),
-				new PlayerEntity(
-						account.getPlayer().getId(),
-						account.getPlayer().getName(),
-						account.getPlayer().getEmail(),
-						null
-				),
-				null
-	    );
+		return new AccountEntity(account.getId(), account.getPassword(), new PlayerEntity(account.getPlayer().getId(),
+				account.getPlayer().getName(), account.getPlayer().getEmail(), null), null);
 	}
 
 	public Account toAccount(AccountEntity accountEntity) {
 		return new Account(
-				accountEntity.getId(),
-				accountEntity.getPassword(),
-				new Player(
-						accountEntity.getPlayerEntity().getId(),
-						accountEntity.getPlayerEntity().getName(),
-						accountEntity.getPlayerEntity().getEmail(),
-						null
-				),
-				null
-		);
+				accountEntity.getId(), accountEntity.getPassword(), new Player(accountEntity.getPlayerEntity().getId(),
+						accountEntity.getPlayerEntity().getName(), accountEntity.getPlayerEntity().getEmail(), null),
+				null);
 	}
 }
