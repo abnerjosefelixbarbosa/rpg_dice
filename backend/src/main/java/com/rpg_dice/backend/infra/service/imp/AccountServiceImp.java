@@ -27,4 +27,9 @@ public class AccountServiceImp implements AccountService {
 
 		return accountMapper.toAccount(accountEntity);
 	}
+
+	public boolean existsByPasswordOrPlayerNameOrPlayerEmail(Account account) {
+		return accountEntityRepository.existsByPasswordOrPlayerEntityNameOrPlayerEntityEmail(account.getPassword(),
+				account.getPlayer().getName(), account.getPlayer().getEmail());
+	}
 }
