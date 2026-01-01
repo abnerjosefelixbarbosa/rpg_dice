@@ -31,8 +31,8 @@ public class AccountController {
 		
 		account = accountUsercase.create(account);
 		
+		AccountResponseDTO accountResponseDTO = accountMapper.toAccountResponseDTO(account);
 		
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(null);
+		return ResponseEntity.status(HttpStatus.CREATED).body(accountResponseDTO);
 	}
 }
