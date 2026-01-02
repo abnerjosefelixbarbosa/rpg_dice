@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,16 +55,145 @@ class AccountControllerTI {
 
 	@Test
 	void shouldCreateAndReturnStatus201() throws Exception {
-		loadPlayer();
-
-		loadAccount();
-
 		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", "nome1", "email1@gmail.com");
 
 		String object = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isCreated()).andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithNullPasswordAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO(null, "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password").value("Senha não deve ser nulo ou vázio.")).andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithEmptyPasswordAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("", "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password").value("Senha não deve ser nulo ou vázio.")).andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithInvalidPasswordAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("password", "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create")
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(object))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password")
+						.value("Senha deve ter caracteres especiais, caracteres numericos e com letra maiuscula."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithMoreThan20CharactersPasswordAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Password111111111111", "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password").value("Senha não deve ter mais de 20 caracteres.")).andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithNullPlayerNameAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", null, "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerName").value("Nome do jogador não deve ser nulo ou vázio."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithBlankPlayerNameAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", "", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerName").value("Nome do jogador não deve ser nulo ou vázio."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithMoreThan100CharactersPlayerNameAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1",
+				"Nome1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerName").value("Nome do jogador não deve ter mais de 100 caracteres."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithNullPlayerEmailAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", "nome1", null);
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerEmail").value("Email do jogador não deve ser nulo ou vázio."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithEmptyPlayerEmailAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Passwor1", "nome1", "");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerEmail").value("Email do jogador não deve ser nulo ou vázio."))
+				.andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithInvalidPlayerEmailAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Password1", "nome1", "email1");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerEmail").value("Email do jogador deve ser valido.")).andDo(print());
+	}
+
+	@Test
+	void shouldCreateWithMoreThan50CharactersPlayerEmailAndReturnStatus400() throws Exception {
+		AccountRequestDTO dto = new AccountRequestDTO("@Password1", "nome1",
+				"email11111111111111111111111111111111111111111111111111111111111@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.playerEmail").value("Email do jogador não deve ter mais de 50 caracteres."))
+				.andDo(print());
 	}
 
 	@Test
