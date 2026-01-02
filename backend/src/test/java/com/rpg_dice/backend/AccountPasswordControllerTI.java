@@ -32,7 +32,7 @@ public class AccountPasswordControllerTI {
 	private AccountEntityRepository accountEntityRepository;
 	@Autowired
 	private PlayerEntityRepository playerEntityRepository;
-	
+
 	@BeforeEach
 	void setUp() throws Exception {
 		accountEntityRepository.deleteAll();
@@ -44,88 +44,51 @@ public class AccountPasswordControllerTI {
 		accountEntityRepository.deleteAll();
 		playerEntityRepository.deleteAll();
 	}
-	
+
 	@Test
 	void shouldCreateWithNullPasswordAndReturnStatus400() throws Exception {
-		AccountRequestDTO dto = new AccountRequestDTO(
-				null,
-				"nome1",
-				"email1@gmail.com"
-		);
-		
-        String object =  objectMapper.writeValueAsString(dto);
-	    
-	    mockMvc.perform(
-	    		post("/accounts/create")
-	    		.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.content(object)
-		)
-	    .andExpect(status().isBadRequest())
-	    .andExpect(jsonPath("$.password").value("Senha não deve ser nulo ou vázio."))
-	    .andDo(print());
+		AccountRequestDTO dto = new AccountRequestDTO(null, "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password").value("Senha não deve ser nulo ou vázio.")).andDo(print());
 	}
-	
+
 	@Test
 	void shouldCreateWithEmptyPasswordAndReturnStatus400() throws Exception {
-		AccountRequestDTO dto = new AccountRequestDTO(
-				"",
-				"nome1",
-				"email1@gmail.com"
-		);
-		
-        String object =  objectMapper.writeValueAsString(dto);
-	    
-	    mockMvc.perform(
-	    		post("/accounts/create")
-	    		.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.content(object)
-		)
-	    .andExpect(status().isBadRequest())
-	    .andExpect(jsonPath("$.password").value("Senha não deve ser nulo ou vázio."))
-	    .andDo(print());
+		AccountRequestDTO dto = new AccountRequestDTO("", "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password").value("Senha não deve ser nulo ou vázio.")).andDo(print());
 	}
-	
+
 	@Test
 	void shouldCreateWithInvalidPasswordAndReturnStatus400() throws Exception {
-		AccountRequestDTO dto = new AccountRequestDTO(
-				"password",
-				"nome1",
-				"email1@gmail.com"
-		);
-		
-        String object =  objectMapper.writeValueAsString(dto);
-	    
-	    mockMvc.perform(
-	    		post("/accounts/create")
-	    		.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.content(object)
-		)
-	    .andExpect(status().isBadRequest())
-	    .andExpect(jsonPath("$.password").value("Senha deve ter caracteres especiais, caracteres numericos e com letra maiuscula."))
-	    .andDo(print());
+		AccountRequestDTO dto = new AccountRequestDTO("password", "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create")
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(object))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password")
+						.value("Senha deve ter caracteres especiais, caracteres numericos e com letra maiuscula."))
+				.andDo(print());
 	}
-	
+
 	@Test
 	void shouldCreateWithMoreThan20CharactersPasswordAndReturnStatus400() throws Exception {
-		AccountRequestDTO dto = new AccountRequestDTO(
-				"@Password111111111111",
-				"nome1",
-				"email1@gmail.com"
-		);
-		
-        String object =  objectMapper.writeValueAsString(dto);
-	    
-	    mockMvc.perform(
-	    		post("/accounts/create")
-	    		.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.content(object)
-		)
-	    .andExpect(status().isBadRequest())
-	    .andExpect(jsonPath("$.password").value("Senha não deve ter mais de 20 caracteres."))
-	    .andDo(print());
+		AccountRequestDTO dto = new AccountRequestDTO("@Password111111111111", "nome1", "email1@gmail.com");
+
+		String object = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(post("/accounts/create").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(object)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.password").value("Senha não deve ter mais de 20 caracteres.")).andDo(print());
 	}
 }
